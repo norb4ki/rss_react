@@ -1,21 +1,16 @@
 import { Component } from 'react';
 import Card from './Card.tsx';
+import { Character } from '../interfaces/character.ts';
 
-class CardList extends Component {
+interface CardListProps {
+  data: Character[];
+}
 
-  state = {
-    results: [{
-      name: 'Luke Skywalker',
-      height: '172',
-      mass: '77',
-      hair_color: 'blond',
-    }]
-  }
+class CardList extends Component<CardListProps> {
   render() {
     return (
       <>
-        <Card info={this.state.results}/>
-
+        <Card info={this.props.data} />
       </>
     );
   }

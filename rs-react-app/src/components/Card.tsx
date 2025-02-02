@@ -1,12 +1,8 @@
 import { Component } from 'react';
+import { Character } from '../interfaces/character.ts';
 
 interface CardProps {
-  info: {
-    name: string;
-    height: string;
-    mass: string;
-    hair_color: string;
-  }[];
+  info: Character[];
 }
 
 class Card extends Component<CardProps> {
@@ -16,9 +12,9 @@ class Card extends Component<CardProps> {
         {this.props.info.map((character, index) => (
           <div key={index}>
             <h2>{character.name}</h2>
-            <p>Height: {character.height}</p>
+            <p>Birth Year: {character.birth_year}</p>
             <p>Mass: {character.mass}</p>
-            <p>Hair Color: {character.hair_color}</p>
+            <p>Height: {character.height}</p>
           </div>
         ))}
       </div>
