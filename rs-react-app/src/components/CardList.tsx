@@ -10,7 +10,9 @@ class CardList extends Component<CardListProps> {
   render() {
     return (
       <>
-        <Card info={this.props.data} />
+        {this.props.data.map((character, index) => (
+          <Card info={character} key={index} />
+        ))}
       </>
     );
   }

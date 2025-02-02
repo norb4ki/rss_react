@@ -3,6 +3,7 @@ import { Character } from '../interfaces/character.ts';
 
 export interface SearchPanelProps {
   load: (results: Character[]) => void;
+  setLoading: (isLoading: boolean) => void;
 }
 
 class SearchPanel extends Component<SearchPanelProps> {
@@ -16,6 +17,7 @@ class SearchPanel extends Component<SearchPanelProps> {
   };
 
   handleSearch = async () => {
+    this.props.setLoading(true);
     const searchTerm = this.state.inputValue.trim();
     let url = `https://swapi.dev/api/people/`;
 
@@ -32,6 +34,7 @@ class SearchPanel extends Component<SearchPanelProps> {
 
       const response = await fetch(url);
       const data = await response.json();
+      this.props.setLoading(false);
 
       if (data.results.length > 0) {
         this.props.load(data.results);
