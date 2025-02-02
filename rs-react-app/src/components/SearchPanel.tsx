@@ -1,10 +1,15 @@
 import { Component } from 'react';
+import { Character } from '../interfaces/character.ts';
 
-class SearchPanel extends Component {
+export interface SearchPanelProps {
+  load: (results: Character[]) => void;
+  setLoading: (isLoading: boolean) => void;
+}
+
+class SearchPanel extends Component<SearchPanelProps> {
   state = {
     lastTerm: localStorage.getItem('lastSearch') || '',
     inputValue: localStorage.getItem('lastSearch') || '',
-    searchResults: [],
   };
 
   saveSearchTerm = (term: string) => {
@@ -12,10 +17,12 @@ class SearchPanel extends Component {
   };
 
   handleSearch = async () => {
+    this.props.setLoading(true);
     const searchTerm = this.state.inputValue.trim();
+    let url = `https://swapi.dev/api/people/`;
 
-    if (!searchTerm) {
-      return;
+    if (searchTerm) {
+      url = `https://swapi.dev/api/people/?search=${searchTerm}`;
     }
 
     console.log(`Searching for: ${searchTerm}`);
@@ -25,20 +32,19 @@ class SearchPanel extends Component {
         this.saveSearchTerm(searchTerm);
       });
 
-      const url = `https://swapi.dev/api/people/?search=${searchTerm}`;
       const response = await fetch(url);
       const data = await response.json();
+      this.props.setLoading(false);
 
       if (data.results.length > 0) {
-        this.setState({ searchResults: data.results });
+        this.props.load(data.results);
         console.log('Characters found:', data.results);
       } else {
-        this.setState({ searchResults: [] });
+        this.props.load([]);
         console.log('No characters found');
       }
     } catch (error) {
       console.error('Error fetching data:', error);
-      this.setState({ searchResults: [] });
     }
   };
 
@@ -48,9 +54,10 @@ class SearchPanel extends Component {
         <input
           type="text"
           placeholder="Search for a character"
-          onChange={(event) =>
-            this.setState({ inputValue: event.target.value })
-          }
+          onChange={(event) => {
+            this.setState({ inputValue: event.target.value });
+            console.log('Input value:', this.state.inputValue);
+          }}
           value={this.state.inputValue}
         />
         <button onClick={this.handleSearch}>Search</button>
