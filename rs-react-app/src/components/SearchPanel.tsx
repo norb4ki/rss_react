@@ -1,6 +1,6 @@
-import { useState } from 'react';
 import { Character } from '../interfaces/character.ts';
 import { fetchCharacters } from '../services/apiService/service.ts';
+import { useSearchQuery } from '../common/hooks/useSearchQuery.ts';
 
 export interface SearchPanelProps {
   setResults: (results: Character[]) => void;
@@ -8,37 +8,21 @@ export interface SearchPanelProps {
 }
 
 const SearchPanel = (props: SearchPanelProps) => {
-  const [inputValue, setInputValue] = useState(
-    localStorage.getItem('lastSearch') || ''
-  );
-  const [lastTerm, setLastTerm] = useState(
-    localStorage.getItem('lastSearch') || ''
-  );
-
-  const saveSearchTerm = (term: string) => {
-    localStorage.setItem('lastSearch', term);
-  };
+  const { searchQuery, setSearchQuery } = useSearchQuery();
 
   const handleSearch = async () => {
     props.setLoading(true);
-    const searchTerm = inputValue.trim();
+    const trimmedSearchTerm = searchQuery.trim();
 
-    console.log(`Searching for: ${searchTerm}`);
-    console.log(`Last search term: ${lastTerm}`);
+    console.log(`Searching for: ${trimmedSearchTerm}`);
+    setSearchQuery(trimmedSearchTerm);
+    console.log('Search query now is:', searchQuery);
     try {
-      setLastTerm(searchTerm);
-      saveSearchTerm(searchTerm);
-
-      const data = await fetchCharacters(searchTerm);
+      const data = await fetchCharacters(trimmedSearchTerm);
       props.setLoading(false);
 
-      if (data.results.length > 0) {
-        props.setResults(data.results);
-        console.log('Characters found:', data.results);
-      } else {
-        props.setResults([]);
-        console.log('No characters found');
-      }
+      props.setResults(data.results.length > 0 ? data.results : []);
+      console.log('Characters found:', data.results);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -50,10 +34,8 @@ const SearchPanel = (props: SearchPanelProps) => {
         type="text"
         placeholder="Search for a character"
         onChange={(event) => {
-          setInputValue(event.target.value);
-          console.log('Input value:', event.target.value);
+          setSearchQuery(event.target.value);
         }}
-        value={inputValue}
       />
       <button onClick={handleSearch}>Search</button>
     </div>
