@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Character } from '../interfaces/character.ts';
+import { fetchCharacters } from '../services/apiService/service.ts';
 
 export interface SearchPanelProps {
   setResults: (results: Character[]) => void;
@@ -21,20 +22,14 @@ const SearchPanel = (props: SearchPanelProps) => {
   const handleSearch = async () => {
     props.setLoading(true);
     const searchTerm = inputValue.trim();
-    let url = `https://swapi.dev/api/people/`;
-
-    if (searchTerm) {
-      url = `https://swapi.dev/api/people/?search=${searchTerm}`;
-    }
 
     console.log(`Searching for: ${searchTerm}`);
-
+    console.log(`Last search term: ${lastTerm}`);
     try {
       setLastTerm(searchTerm);
       saveSearchTerm(searchTerm);
 
-      const response = await fetch(url);
-      const data = await response.json();
+      const data = await fetchCharacters(searchTerm);
       props.setLoading(false);
 
       if (data.results.length > 0) {
