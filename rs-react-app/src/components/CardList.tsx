@@ -8,8 +8,8 @@ interface CardListProps {
 const CardList = (props: CardListProps) => {
   return (
     <>
-      {props.data.map((character, index) => (
-        <Card info={character} key={index} />
+      {props.data.map((character) => (
+        <Card info={character} key={character.name} />
       ))}
     </>
   );
