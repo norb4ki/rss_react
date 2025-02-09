@@ -1,13 +1,9 @@
-import { Component } from 'react';
-
-class ErrorButton extends Component {
-  handleClick = () => {
+const ErrorButton = () => {
+  const handleClick = () => {
     throw new Error('This is a test error!');
   };
 
-  render() {
-    return <button onClick={this.handleClick}>Throw Error</button>;
-  }
-}
+  return <button onClick={handleClick}>Throw Error</button>;
+};
 
 export default ErrorButton;
