@@ -1,24 +1,26 @@
-import { Component } from 'react';
+import { useState } from 'react';
 import { Character } from '../interfaces/character.ts';
 
 export interface SearchPanelProps {
-  load: (results: Character[]) => void;
+  setResults: (results: Character[]) => void;
   setLoading: (isLoading: boolean) => void;
 }
 
-class SearchPanel extends Component<SearchPanelProps> {
-  state = {
-    lastTerm: localStorage.getItem('lastSearch') || '',
-    inputValue: localStorage.getItem('lastSearch') || '',
-  };
+const SearchPanel = (props: SearchPanelProps) => {
+  const [inputValue, setInputValue] = useState(
+    localStorage.getItem('lastSearch') || ''
+  );
+  const [lastTerm, setLastTerm] = useState(
+    localStorage.getItem('lastSearch') || ''
+  );
 
-  saveSearchTerm = (term: string) => {
+  const saveSearchTerm = (term: string) => {
     localStorage.setItem('lastSearch', term);
   };
 
-  handleSearch = async () => {
-    this.props.setLoading(true);
-    const searchTerm = this.state.inputValue.trim();
+  const handleSearch = async () => {
+    props.setLoading(true);
+    const searchTerm = inputValue.trim();
     let url = `https://swapi.dev/api/people/`;
 
     if (searchTerm) {
@@ -28,19 +30,18 @@ class SearchPanel extends Component<SearchPanelProps> {
     console.log(`Searching for: ${searchTerm}`);
 
     try {
-      this.setState({ lastTerm: searchTerm }, () => {
-        this.saveSearchTerm(searchTerm);
-      });
+      setLastTerm(searchTerm);
+      saveSearchTerm(searchTerm);
 
       const response = await fetch(url);
       const data = await response.json();
-      this.props.setLoading(false);
+      props.setLoading(false);
 
       if (data.results.length > 0) {
-        this.props.load(data.results);
+        props.setResults(data.results);
         console.log('Characters found:', data.results);
       } else {
-        this.props.load([]);
+        props.setResults([]);
         console.log('No characters found');
       }
     } catch (error) {
@@ -48,22 +49,20 @@ class SearchPanel extends Component<SearchPanelProps> {
     }
   };
 
-  render() {
-    return (
-      <div>
-        <input
-          type="text"
-          placeholder="Search for a character"
-          onChange={(event) => {
-            this.setState({ inputValue: event.target.value });
-            console.log('Input value:', this.state.inputValue);
-          }}
-          value={this.state.inputValue}
-        />
-        <button onClick={this.handleSearch}>Search</button>
-      </div>
-    );
-  }
-}
+  return (
+    <div>
+      <input
+        type="text"
+        placeholder="Search for a character"
+        onChange={(event) => {
+          setInputValue(event.target.value);
+          console.log('Input value:', event.target.value);
+        }}
+        value={inputValue}
+      />
+      <button onClick={handleSearch}>Search</button>
+    </div>
+  );
+};
 
 export default SearchPanel;

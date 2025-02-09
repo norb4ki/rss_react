@@ -4,7 +4,7 @@ interface CardProps {
   info: Character;
 }
 
-const Card = (props:CardProps) => {
+const Card = (props: CardProps) => {
   return (
     <div>
       <h2>{props.info.name}</h2>

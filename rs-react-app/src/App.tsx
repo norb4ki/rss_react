@@ -17,7 +17,7 @@ const App = () => {
         <Loader />
       ) : (
         <>
-          <SearchPanel setLoading={setIsLoading} load={setFetchResults} />
+          <SearchPanel setLoading={setIsLoading} setResults={setFetchResults} />
           <ErrorButton />
           <CardList data={fetchResults} />
         </>
