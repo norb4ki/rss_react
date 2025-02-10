@@ -1,9 +1,9 @@
-import { Character } from '../interfaces/character.ts';
-import { fetchCharacters } from '../services/apiService/service.ts';
-import { useSearchQuery } from '../common/hooks/useSearchQuery.ts';
+import { ICharacterDTO } from '../../../domain/interfaces/character/character.ts';
+import { fetchCharacters } from '../../../common/services/apiService/service.ts';
+import { useSearchQuery } from '../../../common/hooks/useSearchQuery.ts';
 
 export interface SearchPanelProps {
-  setResults: (results: Character[]) => void;
+  setResults: (results: ICharacterDTO[]) => void;
   setLoading: (isLoading: boolean) => void;
 }
 

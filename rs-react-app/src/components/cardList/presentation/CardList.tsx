@@ -1,8 +1,8 @@
-import Card from './Card.tsx';
-import { Character } from '../interfaces/character.ts';
+import Card from '../../card/presentation/Card.tsx';
+import { ICharacterDTO } from '../../../domain/interfaces/character/character.ts';
 
 interface CardListProps {
-  data: Character[];
+  data: ICharacterDTO[];
 }
 
 const CardList = (props: CardListProps) => {

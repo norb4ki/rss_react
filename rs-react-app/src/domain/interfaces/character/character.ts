@@ -1,4 +1,4 @@
-export interface Character {
+export interface ICharacterDTO {
   birth_year: string;
   created: string;
   edited: string;

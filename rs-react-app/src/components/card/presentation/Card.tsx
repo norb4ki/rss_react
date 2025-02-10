@@ -1,7 +1,7 @@
-import { Character } from '../interfaces/character.ts';
+import { ICharacterDTO } from '../../../domain/interfaces/character/character.ts';
 
 interface CardProps {
-  info: Character;
+  info: ICharacterDTO;
 }
 
 const Card = (props: CardProps) => {

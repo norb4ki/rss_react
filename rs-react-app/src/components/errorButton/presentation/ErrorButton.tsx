@@ -1,13 +1,6 @@
-import {
-  FunctionComponent,
-  PropsWithChildren,
-  ReactNode,
-  useState,
-} from 'react';
+import React, { PropsWithChildren, ReactNode, useState } from 'react';
 
-const ErrorButton: FunctionComponent<PropsWithChildren> = ({
-  children,
-}): ReactNode => {
+const ErrorButton: React.FC<PropsWithChildren> = ({ children }): ReactNode => {
   const [hasError, setHasError] = useState<boolean>(false);
   const handleClick = () => {
     setHasError(true);
