@@ -1,20 +1,24 @@
+import { useState } from 'react';
+
 export interface SearchPanelProps {
-  setSearchQuery: (query: string) => void;
   searchQuery?: string | undefined;
-  handleSearch: () => void;
+  handleSearch: (input: string) => void;
 }
 
 const SearchPanel = (props: SearchPanelProps) => {
+  const [inputValue, setInputValue] = useState('');
+
   return (
     <div>
       <input
+        value={inputValue}
         type="text"
         placeholder={`Search for a ${props.searchQuery ? props.searchQuery : 'character'}`}
         onChange={(event) => {
-          props.setSearchQuery(event.target.value);
+          setInputValue(event.target.value);
         }}
       />
-      <button onClick={props.handleSearch}>Search</button>
+      <button onClick={() => props.handleSearch(inputValue)}>Search</button>
     </div>
   );
 };

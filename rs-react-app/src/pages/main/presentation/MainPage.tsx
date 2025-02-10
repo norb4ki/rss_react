@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from 'react';
+import React, { PropsWithChildren, useEffect } from 'react';
 import Header from '../../../components/header/presentation/Header.tsx';
 import SearchPanel from '../../../components/searchPanel/presentation/SearchPanel.tsx';
 import CardList from '../../../components/cardList/presentation/CardList.tsx';
@@ -12,19 +12,25 @@ const MainPage: React.FC<PropsWithChildren> = () => {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const { searchQuery, setSearchQuery } = useSearchQuery();
 
-  const handleSearch = async () => {
-    setIsLoading(true);
-    const trimmedSearchTerm = searchQuery.trim();
-    setSearchQuery(trimmedSearchTerm);
-
-    try {
-      const data = await fetchCharacters(trimmedSearchTerm);
-      setIsLoading(false);
-      setFetchResults(data.results.length > 0 ? data.results : []);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
+  const handleSearch = (input: string) => {
+    setSearchQuery(input.trim());
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const data = await fetchCharacters(searchQuery.trim());
+        setFetchResults(data.results.length > 0 ? data.results : []);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData().catch(console.error);
+  }, [searchQuery]);
 
   return (
     <div>
@@ -35,11 +41,7 @@ const MainPage: React.FC<PropsWithChildren> = () => {
         <Loader />
       ) : (
         <>
-          <SearchPanel
-            handleSearch={handleSearch}
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-          />
+          <SearchPanel handleSearch={handleSearch} searchQuery={searchQuery} />
           <CardList data={fetchResults} />
         </>
       )}

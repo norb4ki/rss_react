@@ -9,7 +9,6 @@ export const useSearchQuery = () => {
 
   useEffect(() => {
     localStorage.setItem(SEARCH_KEY, searchQuery);
-    console.log('Updated search query:', searchQuery);
   }, [searchQuery]);
 
   return { searchQuery, setSearchQuery };
