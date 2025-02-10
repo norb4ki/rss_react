@@ -1,6 +1,13 @@
-import { useState } from 'react';
+import {
+  FunctionComponent,
+  PropsWithChildren,
+  ReactNode,
+  useState,
+} from 'react';
 
-const ErrorButton = () => {
+const ErrorButton: FunctionComponent<PropsWithChildren> = ({
+  children,
+}): ReactNode => {
   const [hasError, setHasError] = useState<boolean>(false);
   const handleClick = () => {
     setHasError(true);
@@ -10,7 +17,7 @@ const ErrorButton = () => {
     throw new Error('I crashed!');
   }
 
-  return <button onClick={handleClick}>Throw Error</button>;
+  return <button onClick={handleClick}>{children || 'Throw Error'}</button>;
 };
 
 export default ErrorButton;
